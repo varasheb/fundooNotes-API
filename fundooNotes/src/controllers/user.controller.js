@@ -17,3 +17,22 @@ export const newUser = async (req, res) => {
     });
   }
 };
+
+export const userLogin= async (req, res) => {
+  try {
+    const data = await UserService.userLogin(req.body);
+    res.status(HttpStatus.OK).json({
+      success: true,
+      message: 'User loggedIn successfully',
+      data: data.user,
+      token: data.token
+    });
+
+  } catch (error) {
+    res.status(HttpStatus.BAD_REQUEST).json({
+      code: HttpStatus.BAD_REQUEST,
+      message: error.message
+    });
+  }
+  
+}
