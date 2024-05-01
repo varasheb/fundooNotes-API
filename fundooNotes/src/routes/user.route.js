@@ -11,7 +11,6 @@ router.post('', signInUserValidator, userController.signInUser);
 router.post('/login',loginValidator, userController.userLogin);
 // login through token
 router.get('/verify', userAuth , userController.verifyUser);
-// login through sesion
-router.get('/session', isAuthBySession ,userController.sessionLogin)
+
 
 export default router;

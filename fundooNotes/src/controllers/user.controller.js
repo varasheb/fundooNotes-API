@@ -55,21 +55,3 @@ export const verifyUser= async (req, res) => {
     });
   }
 }
-
-export const sessionLogin= async (req, res) => {
-  try {
-    const data = await UserService.sessionLogin(req);
-
-    res.status(HttpStatus.OK).json({
-      success: true,
-      message: 'User loggedIn successfully By Session',
-      data: data,
-    });
-
-  } catch (error) {
-    res.status(HttpStatus.BAD_REQUEST).json({
-      code: HttpStatus.BAD_REQUEST,
-      message: error.message
-    });
-  }
-}

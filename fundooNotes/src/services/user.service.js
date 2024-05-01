@@ -13,8 +13,6 @@ export const signInUser = async (req) => {
   } else {
     body.password = await bcrypt.hash(body.password, 10);
     const data = await User.create(body);
-    req.session.user = data;
-    req.session.authenticated = true;
     return data;
   }
 };
@@ -29,16 +27,11 @@ export const userLogin = async (req) => {
   }
 
   const token = jwt.sign({ userId: user._id }, key, { expiresIn: '1h' });
-  req.session.user = user;
-  req.session.authenticated = true;
   return { user, token };
 };
 
 export const verifyUser = async (res) => {
-  const {token,userId} = res.locals;
-  if (!token) {
-    throw new Error('Token Not provided');
-  }
+  const {userId} = res.locals;
   try {
     const user = await User.findById(userId);
     return { user, token };
@@ -47,10 +40,3 @@ export const verifyUser = async (res) => {
   }
 };
 
-export const sessionLogin = async (req) => {
-  if(req.session.authenticated){
-    return req.session.user;
-  }else{
-    throw new Error('No session found please login');
-  }
-};

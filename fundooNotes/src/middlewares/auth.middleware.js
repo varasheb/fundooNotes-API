@@ -27,10 +27,3 @@ export const userAuth = async (req, res, next) => {
   }
 };
 
-export const isAuthBySession =(req, res, next)=>{
-  if (req.session.authenticated) {
-    next();
-  } else {
-    throw new Error('UnAuthorised User');
-  }
-};
