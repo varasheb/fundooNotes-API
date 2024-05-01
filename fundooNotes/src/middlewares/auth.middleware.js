@@ -4,20 +4,15 @@ import dotenv from 'dotenv'
 dotenv.config()
 const key = process.env.JWT_SECRET_KEY;
 
-/**
- * Middleware to authenticate if user has a valid Authorization token
- * Authorization: Bearer <token>
- *
- * @param {Object} req
- * @param {Object} res
- * @param {Function} next
- */
+
+
 export const userAuth = async (req, res, next) => {
   try {
-    const bearerToken = req.headers.authorization.split(' ')[1];
+    let bearerToken = req.headers.authorization;
     if (!bearerToken) {
       throw new Error('Token Not provided');
     }
+    bearerToken=bearerToken.split(' ')[1]
     const {userId}= await jwt.verify(bearerToken, key);
     res.locals.userId = userId;
     res.locals.token = bearerToken;

@@ -6,8 +6,17 @@ const router = express.Router();
 
 router.post('', userAuth , noteController.createNote);
 
-router.post('/archived', userAuth , noteController.isArchivedNote)
+router.get('', userAuth , noteController.getAllNotes);
 
-router.post('/trashed', userAuth ,noteController.isTrashedNote)
+router.get('/:_id', userAuth ,noteController.getNote);
+
+router.delete('/:_id', userAuth, noteController.deleteNote);
+
+router.post('/archived/:_id', userAuth , noteController.isArchivedNote)
+
+router.post('/trashed/:_id', userAuth ,noteController.isTrashedNote)
+
+
+
 
 export default router;

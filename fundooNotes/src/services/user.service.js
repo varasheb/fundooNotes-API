@@ -5,8 +5,9 @@ import dotenv from 'dotenv';
 dotenv.config();
 const key = process.env.JWT_SECRET_KEY;
 
-export const signInUser = async (req) => {
-  const body=req.body
+
+
+export const signInUser = async (body) => {
   const userExists = await User.findOne({ email: body.email });
   if (userExists) {
     throw new Error('User with this email already exists');
@@ -17,8 +18,9 @@ export const signInUser = async (req) => {
   }
 };
 
-export const userLogin = async (req) => {
-  const { email, password }=req.body
+
+
+export const userLogin = async ({ email, password }) => {
 
   const user = await User.findOne({ email });
 
@@ -30,8 +32,9 @@ export const userLogin = async (req) => {
   return { user, token };
 };
 
-export const verifyUser = async (res) => {
-  const {userId} = res.locals;
+
+
+export const verifyUser = async (userId) => {
   try {
     const user = await User.findById(userId);
     return { user, token };

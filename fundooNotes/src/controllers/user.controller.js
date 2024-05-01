@@ -4,7 +4,8 @@ import * as UserService from '../services/user.service';
 
 export const signInUser = async (req, res) => {
   try {
-    const data = await UserService.signInUser(req);
+    const body=req.body
+    const data = await UserService.signInUser(body);
     res.status(HttpStatus.CREATED).json({
       code: HttpStatus.CREATED,
       data: data,
@@ -20,7 +21,7 @@ export const signInUser = async (req, res) => {
 
 export const userLogin= async (req, res) => {
   try {
-    const data = await UserService.userLogin(req);
+    const data = await UserService.userLogin(req.body);
     res.status(HttpStatus.OK).json({
       success: true,
       message: 'User loggedIn successfully',
@@ -39,7 +40,8 @@ export const userLogin= async (req, res) => {
 
 export const verifyUser= async (req, res) => {
   try {
-    const data = await UserService.verifyUser(res);
+    const {userId} = res.locals;
+    const data = await UserService.verifyUser(userId);
 
     res.status(HttpStatus.OK).json({
       success: true,
