@@ -7,6 +7,7 @@ import 'winston-daily-rotate-file';
 const logger = winston.createLogger({
   format: format.combine(format.timestamp(), format.simple()),
   colorize: true,
+  
   transports: [
     new winston.transports.File({
       filename: 'logs/server/error.log',
@@ -19,7 +20,7 @@ const logger = winston.createLogger({
       handleExceptions: true
     }),
     new winston.transports.DailyRotateFile({
-      maxFiles: '14d',
+      maxFiles: '7d',
       level: 'info',
       dirname: 'logs/server/daily',
       datePattern: 'YYYY-MM-DD',
@@ -27,47 +28,15 @@ const logger = winston.createLogger({
     }),
     new winston.transports.Console({
       level: 'debug',
-      json: false,
+      format: format.combine(
+        format.colorize(),
+        format.cli(),
+        format.printf((info)=>`[${info.timestamp}]  ${info.level}: ${info.message}`)
+      ),
       handleExceptions: true
     })
   ]
 });
 
-/**
- * morganLogger logs all http request in a dedicated file and on console
- */
-const morganLogger = winston.createLogger({
-  format: format.combine(format.simple()),
-  transports: [
-    new winston.transports.File({
-      filename: 'logs/requests/all.log',
-      level: 'debug',
-      handleExceptions: true
-    }),
-    new winston.transports.Console({
-      level: 'debug',
-      json: false,
-      handleExceptions: true
-    }),
-    new winston.transports.DailyRotateFile({
-      maxFiles: '14d',
-      level: 'info',
-      dirname: 'logs/requests/daily',
-      datePattern: 'YYYY-MM-DD',
-      filename: '%DATE%.log'
-    })
-  ]
-});
-
-export const logStream = {
-  /**
-   * A writable stream for winston logger.
-   *
-   * @param {any} message
-   */
-  write(message) {
-    morganLogger.info(message.toString());
-  }
-};
 
 export default logger;

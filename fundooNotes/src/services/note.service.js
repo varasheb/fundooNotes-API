@@ -8,6 +8,10 @@ export const createNote=async (body)=>{
     return await Note.create(body);
 }
 
+export const updateNote = async (noteId, body) => {
+    return await Note.findByIdAndUpdate(noteId, body, { new: true });
+}
+
 export const getAllNotes=async (userId)=>{
     return await Note.find({createdBy:userId})
 }

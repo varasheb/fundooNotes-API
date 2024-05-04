@@ -2,9 +2,10 @@ import User from '../models/user.model';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import sendmail from '../utils/sendEmail'
 dotenv.config();
 const key = process.env.JWT_SECRET_KEY;
-
+const resetkey=process.env.SECRET_KEY;
 
 
 export const signInUser = async (body) => {
@@ -35,11 +36,30 @@ export const userLogin = async ({ email, password }) => {
 
 
 export const verifyUser = async (userId) => {
-  try {
     const user = await User.findById(userId);
     return { user, token };
-  } catch (error) {
-    throw new Error('Invalid token');
-  }
 };
 
+
+
+export const forgetPassword= async ({email}) => {
+  
+    const user = await User.findOne({email});
+    if(!user)
+    throw new Error("This email is does not Exits")
+    const token = jwt.sign({ userId: user._id }, resetkey, { expiresIn: '10m' });
+    const result= await sendmail(user.email,token)
+    return { user ,token ,result };
+};
+
+export const resetPassword= async (token,newPassword) => {
+   console.log(token)
+    const decoded = jwt.verify(token, resetkey);
+    const user = await User.findById(decoded.userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    user.password= await bcrypt.hash(newPassword, 10);
+    await user.save();
+    return user;
+};

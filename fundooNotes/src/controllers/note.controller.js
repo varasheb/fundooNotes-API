@@ -71,6 +71,25 @@ export const deleteNote = async (req, res) => {
   }
 };
 
+export const updatedNote = async (req, res) => {
+  try {
+    const noteId=req.params._id;
+    const body=req.body;
+
+    const data = await NoteService.updateNote(noteId,body);
+    res.status(HttpStatus.CREATED).json({
+      code: HttpStatus.CREATED,
+      data: data,
+      message: 'Note Updated successfully'
+    });
+  } catch (error) {
+    res.status(HttpStatus.BAD_REQUEST).json({
+      code: HttpStatus.BAD_REQUEST,
+      message: error.message
+    });
+  }
+};
+
 export const isArchivedNote = async (req, res) => {
   try {
     const noteId=req.params._id;

@@ -8,8 +8,12 @@ const noteSchema = new Schema({
     description: {
         type: String
       },
-    createdBy: {
+      createdBy: {
         type: String
+      },
+      color: {
+        type: String,
+        default: "white"
       },
       archived: {
         type: Boolean,
