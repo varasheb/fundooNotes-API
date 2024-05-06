@@ -34,14 +34,6 @@ export const userLogin = async ({ email, password }) => {
 };
 
 
-
-export const verifyUser = async (userId) => {
-    const user = await User.findById(userId);
-    return { user, token };
-};
-
-
-
 export const forgetPassword= async ({email}) => {
   
     const user = await User.findOne({email});
@@ -53,9 +45,7 @@ export const forgetPassword= async ({email}) => {
 };
 
 export const resetPassword= async (token,newPassword) => {
-   console.log(token)
-    const decoded = jwt.verify(token, resetkey);
-    const user = await User.findById(decoded.userId);
+    const user = await User.findById(userId);
     if (!user) {
       throw new Error('User not found');
     }

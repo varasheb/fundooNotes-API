@@ -42,7 +42,7 @@ export const loginValidator = (req, res, next) => {
   }
 };
 
-export const email = (req, res, next) => {
+export const emailValidator = (req, res, next) => {
   const schema = Joi.object({
     email: Joi.string().email().message('Not a valid Email').required()
   });
@@ -58,7 +58,7 @@ export const email = (req, res, next) => {
   }
 };
 
-export const password = (req, res, next) => {
+export const passwordValidator = (req, res, next) => {
   const schema = Joi.object({
     password: Joi.string().min(8).pattern(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?!.*\s).{8,}$/)
     .message('Password must be 8 characters or more with at least one digit, one lowercase letter, one uppercase letter, and one special character')

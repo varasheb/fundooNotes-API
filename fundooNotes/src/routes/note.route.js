@@ -12,12 +12,12 @@ router.get('', userAuth , noteController.getAllNotes);
 
 router.get('/:_id', userAuth ,noteController.getNote);
 
+router.put('/:_id', userAuth , noteController.updatedNote);
+
 router.delete('/:_id', userAuth, noteController.deleteNote);
 
-router.post('/update/:_id', userAuth , noteController.updatedNote);
+router.post('/isarchive/:_id', userAuth , noteController.isArchivedNote);
 
-router.post('/archived/:_id', userAuth , noteController.isArchivedNote);
-
-router.post('/trashed/:_id', userAuth ,noteController.isTrashedNote);
+router.post('/istrash/:_id', userAuth ,noteController.isTrashedNote);
 
 export default router;
