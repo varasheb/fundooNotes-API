@@ -44,7 +44,7 @@ export const forgetPassword= async ({email}) => {
     return { user ,token ,result };
 };
 
-export const resetPassword= async (token,newPassword) => {
+export const resetPassword= async (userId,newPassword) => {
     const user = await User.findById(userId);
     if (!user) {
       throw new Error('User not found');
