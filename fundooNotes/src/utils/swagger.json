@@ -308,10 +308,10 @@
           ]
         }
       },
-      "/notes/isarchive/{noteid}": {
-        "post": {
+       "/notes/isarchive/{nodeid}": {
+        "put": {
           "tags": ["Notes"],
-          "summary": "Archieve a note for User",
+          "summary": "Send a note to archive",
           "produces": [],
           "parameters": [
             {
@@ -323,7 +323,7 @@
           ],
           "responses": {
             "202": {
-              "description": "note archieved succesfully"
+              "description": "note sent to trash succesfully"
             },
             "500": {
               "description": "Internal server error"
@@ -340,7 +340,7 @@
         }
       },
       "/notes/istrash/{nodeid}": {
-        "post": {
+        "put": {
           "tags": ["Notes"],
           "summary": "Send a note to trash",
           "produces": [],

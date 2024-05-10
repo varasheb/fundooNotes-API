@@ -16,8 +16,8 @@ router.put('/:_id', userAuth , noteController.updatedNote);
 
 router.delete('/:_id', userAuth, noteController.deleteNote);
 
-router.post('/isarchive/:_id', userAuth , noteController.isArchivedNote);
+router.put('/isarchive/:_id', userAuth , noteController.isArchivedNote);
 
-router.post('/istrash/:_id', userAuth ,noteController.isTrashedNote);
+router.put('/istrash/:_id', userAuth ,noteController.isTrashedNote);
 
 export default router;
