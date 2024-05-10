@@ -2,25 +2,26 @@ import User from '../models/user.model';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import sendmail from '../utils/sendEmail'
 dotenv.config();
 const key = process.env.JWT_SECRET_KEY;
+const resetkey=process.env.SECRET_KEY;
 
-export const signInUser = async (req) => {
-  const body=req.body
+
+export const signInUser = async (body) => {
   const userExists = await User.findOne({ email: body.email });
   if (userExists) {
     throw new Error('User with this email already exists');
   } else {
     body.password = await bcrypt.hash(body.password, 10);
     const data = await User.create(body);
-    req.session.user = data;
-    req.session.authenticated = true;
     return data;
   }
 };
 
-export const userLogin = async (req) => {
-  const { email, password }=req.body
+
+
+export const userLogin = async ({ email, password }) => {
 
   const user = await User.findOne({ email });
 
@@ -29,28 +30,26 @@ export const userLogin = async (req) => {
   }
 
   const token = jwt.sign({ userId: user._id }, key, { expiresIn: '1h' });
-  req.session.user = user;
-  req.session.authenticated = true;
   return { user, token };
 };
 
-export const verifyUser = async (res) => {
-  const {token,userId} = res.locals;
-  if (!token) {
-    throw new Error('Token Not provided');
-  }
-  try {
-    const user = await User.findById(userId);
-    return { user, token };
-  } catch (error) {
-    throw new Error('Invalid token');
-  }
+
+export const forgetPassword= async ({email}) => {
+  
+    const user = await User.findOne({email});
+    if(!user)
+    throw new Error("This email is does not Exits")
+    const token = jwt.sign({ userId: user._id }, resetkey, { expiresIn: '10m' });
+    const result= await sendmail(user.email,token)
+    return { user ,token ,result };
 };
 
-export const sessionLogin = async (req) => {
-  if(req.session.authenticated){
-    return req.session.user;
-  }else{
-    throw new Error('No session found please login');
-  }
+export const resetPassword= async (userId,newPassword) => {
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    user.password= await bcrypt.hash(newPassword, 10);
+    await user.save();
+    return user;
 };

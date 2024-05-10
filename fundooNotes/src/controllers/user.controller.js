@@ -4,7 +4,8 @@ import * as UserService from '../services/user.service';
 
 export const signInUser = async (req, res) => {
   try {
-    const data = await UserService.signInUser(req);
+    const body=req.body
+    const data = await UserService.signInUser(body);
     res.status(HttpStatus.CREATED).json({
       code: HttpStatus.CREATED,
       data: data,
@@ -20,7 +21,7 @@ export const signInUser = async (req, res) => {
 
 export const userLogin= async (req, res) => {
   try {
-    const data = await UserService.userLogin(req);
+    const data = await UserService.userLogin(req.body);
     res.status(HttpStatus.OK).json({
       success: true,
       message: 'User loggedIn successfully',
@@ -37,15 +38,16 @@ export const userLogin= async (req, res) => {
   
 }
 
-export const verifyUser= async (req, res) => {
+export const forgetPassword= async (req, res) => {
   try {
-    const data = await UserService.verifyUser(res);
+    const data = await UserService.forgetPassword(req.body);
 
     res.status(HttpStatus.OK).json({
       success: true,
-      message: 'User loggedIn successfully',
-      data: data.user,
-      token: data.token
+      message: 'Mail sent  Sucefully',
+      user: data.user,
+      token: data.token,
+      result:data.result.messageId
     });
 
   } catch (error) {
@@ -56,13 +58,15 @@ export const verifyUser= async (req, res) => {
   }
 }
 
-export const sessionLogin= async (req, res) => {
+export const resetPassword= async (req, res) => {
   try {
-    const data = await UserService.sessionLogin(req);
+    const {userId} = res.locals;
+    const {password}=req.body;
+    const data = await UserService.resetPassword(userId,password);
 
     res.status(HttpStatus.OK).json({
       success: true,
-      message: 'User loggedIn successfully By Session',
+      message: 'Reset password Sucefully',
       data: data,
     });
 

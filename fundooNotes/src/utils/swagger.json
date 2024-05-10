@@ -1,0 +1,440 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "V1",
+      "title": " Google Keep ",
+      "description": "This is the replica of google keep.User can register and login , User can do request for forgot password and he can reset password using that shared credentionals . User can loging and perform node CRUD."
+    },
+    "host": "localhost:3000",
+    "basePath": "/api/v1/",
+    "tags": [
+      {
+        "name": "Google keep using express CLI",
+        "description": "This is the replica of google keep"
+      }
+    ],
+    "schemes": ["http"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"],
+    "paths": {
+      "/users": {
+        "post": {
+          "tags": ["User"],
+          "description": "Register user...",
+          "parameters": [
+            {
+              "name": "Register new name",
+              "in": "body",
+              "description": "Register user",
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          ],
+          "produces": ["application/json"],
+          "responses": {
+            "201": {
+              "description": "User created successfully"
+            },
+            "500": {
+              "description": "Internal server error"
+            },
+            "400": {
+                "description": "Bad Request"
+              }
+          }
+        }
+      },
+      "/users/login": {
+        "post": {
+          "tags": ["User"],
+          "description": "User login",
+          "parameters": [
+            {
+              "name": "login user",
+              "in": "body",
+              "description": "User login",
+              "schema": {
+                "$ref": "#/definitions/login"
+              }
+            }
+          ],
+          "produces": ["application/json"],
+          "responses": {
+            "201": {
+              "description": "sucessfully logged in"
+            },
+            "404": {
+              "description": "email or password doesn't match"
+            },
+            "500": {
+              "description": "Internal server error"
+            },
+            "400": {
+                "description": "Bad Request"
+              }
+          }
+        }
+      },
+      "/users/forgotpassword": {
+        "post": {
+          "tags": ["User"],
+          "summary": "Forget password",
+          "produces": [],
+          "parameters": [
+            {
+              "name": "Forget Password",
+              "in": "body",
+              "description": "Forget Password",
+              "required": false,
+              "type": "string",
+              "schema": {
+                "$ref": "#/definitions/ForgetPassword"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "reset password link sent sucessfully"
+            },
+            "500": {
+              "description": "could not send mail"
+            },
+            "400": {
+                "description": "Bad Request"
+              }
+          }
+        }
+      },
+      "/users/resetPassword": {
+        "post": {
+          "tags": ["User"],
+          "summary": "reset password for User",
+          "produces": [],
+          "parameters": [
+            {
+              "name": "new password",
+              "in": "body",
+              "description": "new password",
+              "required": true,
+              "type": "string",
+              "schema": {
+                "$ref": "#/definitions/ResetPassword"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "reset Password is sucessfully done"
+            },
+            "500": {
+              "description": "Internal server error"
+            },
+            "400": {
+                "description": "Bad Request"
+              }
+          },
+          "security": [
+            {
+              "JWT": []
+            }
+          ]
+        }
+      },
+      "/notes": {
+        "post": {
+          "tags": ["Notes"],
+          "summary": "Create a note for User",
+          "produces": [],
+          "parameters": [
+            {
+              "name": "create note",
+              "in": "body",
+              "description": "create note",
+              "required": false,
+              "type": "string",
+              "schema": {
+                "$ref": "#/definitions/Note"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "note created succesfully"
+            },
+            "500": {
+              "description": "Internal server error"
+            },
+            "400": {
+              "description":"Bad Request"
+            }
+          },
+          "security": [
+            {
+              "JWT": []
+            }
+          ]
+        },
+        "get": {
+          "tags": ["Notes"],
+          "summary": "Get all Notes",
+          "produces": [],
+          "parameters": [
+            {
+              "name": "Get Notes",
+              "description": "Get all notesfor User",
+              "required": false
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "notes fetched successfully"
+            },
+            "500": {
+              "description": "Internal server error"
+            },
+            "400": {
+                "description":"Bad Request"
+            }
+          },
+          "security": [
+            {
+              "JWT": []
+            }
+          ]
+        }
+      },
+      "/notes/{noteid}": {
+        "get": {
+          "tags": ["Notes"],
+          "summary": "Get a single note by it's id",
+          "produces": [],
+          "parameters": [
+            {
+              "name": "noteid",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "note fetched successfully"
+            },
+            "500": {
+              "description": "Internal server error"
+            },
+            "400": {
+                "description":"Bad Request"
+            }
+          },
+          "security": [
+            {
+              "JWT": []
+            }
+          ]
+        },
+        "put": {
+          "tags": ["Notes"],
+          "summary": "Update a note for User",
+          "produces": [],
+          "parameters": [
+            {
+              "name": "noteid",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "update note",
+              "in": "body",
+              "description": "update note",
+              "required": false,
+              "type": "string",
+              "schema": {
+                "$ref": "#/definitions/Note"
+              }
+            }
+          ],
+          "responses": {
+            "202": {
+              "description": "note updated succesfully"
+            },
+            "500": {
+              "description": "Internal server error"
+            },
+            "400": {
+                "description":"Bad Request"
+            }
+          },
+          "security": [
+            {
+              "JWT": []
+            }
+          ]
+        },
+        "delete": {
+          "tags": ["Notes"],
+          "summary": "Delete a note",
+          "produces": [],
+          "parameters": [
+            {
+              "name": "noteid",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "delete a note",
+              "description": "delete a note",
+              "required": false
+            }
+          ],
+          "responses": {
+            "202": {
+              "description": "Note deleted succesfully"
+            },
+            "500": {
+              "description": "Internal server error"
+            },
+            "400": {
+                "description":"Bad Request"
+            }
+          },
+          "security": [
+            {
+              "JWT": []
+            }
+          ]
+        }
+      },
+       "/notes/isarchive/{nodeid}": {
+        "put": {
+          "tags": ["Notes"],
+          "summary": "Send a note to archive",
+          "produces": [],
+          "parameters": [
+            {
+              "name": "nodeid",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "202": {
+              "description": "note sent to trash succesfully"
+            },
+            "500": {
+              "description": "Internal server error"
+            },
+            "400": {
+                "description":"Bad Request"
+            }
+          },
+          "security": [
+            {
+              "JWT": []
+            }
+          ]
+        }
+      },
+      "/notes/istrash/{nodeid}": {
+        "put": {
+          "tags": ["Notes"],
+          "summary": "Send a note to trash",
+          "produces": [],
+          "parameters": [
+            {
+              "name": "nodeid",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "202": {
+              "description": "note sent to trash succesfully"
+            },
+            "500": {
+              "description": "Internal server error"
+            },
+            "400": {
+                "description":"Bad Request"
+            }
+          },
+          "security": [
+            {
+              "JWT": []
+            }
+          ]
+        }
+      }
+    },
+  
+    "securityDefinitions": {
+      "JWT": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header"
+      }
+    },
+    "definitions": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "login": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "ForgetPassword": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "ResetPassword": {
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "Note": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+  
